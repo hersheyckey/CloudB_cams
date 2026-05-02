@@ -2,134 +2,136 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>WonderWorld 3D Live</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WonderWorld Live</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-/* ===== BASE ===== */
+/* ================= GLOBAL ================= */
 body {
   margin: 0;
   font-family: system-ui;
-  background: #050814;
+  background: radial-gradient(circle at top, #0b1220, #05070f);
   color: white;
   overflow-x: hidden;
 }
 
-/* ===== ANIMATED BACKGROUND ORBS ===== */
 .orb {
   position: fixed;
   width: 500px;
   height: 500px;
   border-radius: 50%;
   filter: blur(120px);
-  opacity: 0.6;
-  animation: float 12s infinite ease-in-out;
+  opacity: 0.5;
+  animation: float 10s infinite ease-in-out;
 }
 
 .orb.blue { background: #3b82f6; top: -150px; left: -120px; }
-.orb.purple { background: #8b5cf6; bottom: -180px; right: -150px; animation-delay: 2s; }
+.orb.purple { background: #8b5cf6; bottom: -180px; right: -150px; }
 
 @keyframes float {
-  0% { transform: translate(0,0) scale(1); }
-  50% { transform: translate(120px, 80px) scale(1.1); }
-  100% { transform: translate(0,0) scale(1); }
+  0% { transform: translate(0,0); }
+  50% { transform: translate(80px, 60px); }
+  100% { transform: translate(0,0); }
 }
 
-/* ===== HEADER ===== */
+/* ================= HEADER ================= */
 header {
   text-align: center;
-  padding: 30px;
+  padding: 20px;
 }
 
-header h1 {
-  font-size: 26px;
-  letter-spacing: 1px;
+h1 {
+  font-size: 20px;
 }
 
-/* ===== CATEGORY BAR ===== */
+/* ================= TAGS ================= */
 .tags {
   display: flex;
+  gap: 8px;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
+  padding: 10px;
 }
 
 .tag {
-  padding: 8px 14px;
+  padding: 6px 12px;
   border-radius: 999px;
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
+  font-size: 12px;
+}
+
+/* ================= GRID ================= */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  padding: 15px;
+}
+
+/* ================= CARD ================= */
+.card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  overflow: hidden;
   cursor: pointer;
   transition: 0.3s;
 }
 
-.tag:hover {
-  transform: translateY(-3px) scale(1.05);
-  background: rgba(59,130,246,0.25);
-}
-
-/* ===== GRID ===== */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: 22px;
-  padding: 25px;
-  perspective: 1200px;
-}
-
-/* ===== 3D CARD ===== */
-.card {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 18px;
-  overflow: hidden;
-  transform-style: preserve-3d;
-  transition: 0.4s ease;
-  backdrop-filter: blur(14px);
-  position: relative;
-}
-
 .card:hover {
-  transform: rotateX(6deg) rotateY(-6deg) scale(1.03);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  transform: scale(1.03);
+  border-color: #3b82f6;
 }
 
-/* glow edge */
-.card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 18px;
-  padding: 1px;
-  background: linear-gradient(45deg, transparent, #3b82f6, transparent);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0.5;
+.card iframe {
+  width: 100%;
+  height: 180px;
+  border: none;
 }
 
-/* TITLE */
-.title {
-  padding: 12px;
+.card-title {
+  padding: 10px;
+  font-size: 13px;
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
-  background: rgba(0,0,0,0.3);
 }
 
-.live {
-  color: #22c55e;
-  font-weight: bold;
+/* ================= WATCH VIEW ================= */
+#watchView {
+  display: none;
+  padding: 15px;
 }
 
-/* VIDEO */
-iframe {
+.back {
+  margin-bottom: 10px;
+  display: inline-block;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.watch-box {
+  background: rgba(255,255,255,0.05);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.watch-box iframe {
   width: 100%;
-  height: 240px;
+  height: 60vh;
   border: none;
+}
+
+/* ================= MOBILE FIX ================= */
+@media (max-width: 768px) {
+  h1 { font-size: 16px; }
+  .grid { grid-template-columns: 1fr; }
+  .card iframe { height: 200px; }
 }
 </style>
 </head>
@@ -139,8 +141,11 @@ iframe {
 <div class="orb blue"></div>
 <div class="orb purple"></div>
 
+<!-- HOME VIEW -->
+<div id="homeView">
+
 <header>
-  <h1>WonderWorld 3D Live Experience</h1>
+  <h1> WonderWorld Live Experience</h1>
 </header>
 
 <div class="tags">
@@ -149,48 +154,57 @@ iframe {
   <div class="tag">🌲 Forest</div>
   <div class="tag">🏔 Mountain</div>
   <div class="tag">❄ Snow</div>
-  <div class="tag">🏏 Sports</div>
 </div>
 
-<div class="grid">
+<div class="grid" id="grid"></div>
 
-  <!-- Dubai -->
-  <div class="card">
-    <div class="title">Dubai Street Cam <span class="live">LIVE</span></div>
-    <iframe src="https://www.youtube.com/embed/live_stream?channel=UC4R8DWoMoI7CAwX8_LjQHig"></iframe>
-  </div>
+</div>
 
-  <!-- Safari -->
-  <div class="card">
-    <div class="title">African Safari <span class="live">LIVE</span></div>
-    <iframe src="https://www.youtube.com/embed/ydYDqZQpim8"></iframe>
-  </div>
+<!-- WATCH VIEW -->
+<div id="watchView">
 
-  <!-- Forest -->
-  <div class="card">
-    <div class="title">Forest Life <span class="live">LIVE</span></div>
-    <iframe src="https://www.youtube.com/embed/9No-FiEInLA"></iframe>
-  </div>
+  <div class="back" onclick="goBack()">← Back</div>
 
-  <!-- Mountain -->
-  <div class="card">
-    <div class="title">Mountain World <span class="live">LIVE</span></div>
-    <iframe src="https://www.youtube.com/embed/6QF3p2k0a9k"></iframe>
-  </div>
-
-  <!-- Snow -->
-  <div class="card">
-    <div class="title">Snow Region <span class="live">LIVE</span></div>
-    <iframe src="https://www.youtube.com/embed/fV3CpX1Jr8Q"></iframe>
-  </div>
-
-  <!-- Sports -->
-  <div class="card">
-    <div class="title">Sports Live World <span class="live">LIVE</span></div>
-    <iframe src="https://www.youtube.com/embed/live_stream?channel=UCWJ2lWNubArHWmf3FIHbfcQ"></iframe>
+  <div class="watch-box">
+    <iframe id="player"></iframe>
   </div>
 
 </div>
+
+<script>
+const cams = [
+  { id: 1, title: "Dubai Street Cam", url: "https://www.youtube.com/embed/live_stream?channel=UC4R8DWoMoI7CAwX8_LjQHig" },
+  { id: 2, title: "African Safari", url: "https://www.youtube.com/embed/ydYDqZQpim8" },
+  { id: 3, title: "Forest Life", url: "https://www.youtube.com/embed/9No-FiEInLA" },
+  { id: 4, title: "Mountain View", url: "https://www.youtube.com/embed/6QF3p2k0a9k" },
+  { id: 5, title: "Snow World", url: "https://www.youtube.com/embed/fV3CpX1Jr8Q" }
+];
+
+const grid = document.getElementById("grid");
+
+cams.forEach(cam => {
+  grid.innerHTML += `
+    <div class="card" onclick="openCam('${cam.url}')">
+      <iframe src="${cam.url}"></iframe>
+      <div class="card-title">
+        ${cam.title}
+        <span>LIVE</span>
+      </div>
+    </div>
+  `;
+});
+
+function openCam(url){
+  document.getElementById("homeView").style.display = "none";
+  document.getElementById("watchView").style.display = "block";
+  document.getElementById("player").src = url;
+}
+
+function goBack(){
+  document.getElementById("watchView").style.display = "none";
+  document.getElementById("homeView").style.display = "block";
+}
+</script>
 
 </body>
 </html>
