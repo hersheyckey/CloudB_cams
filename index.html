@@ -3,66 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WonderWorld Live</title>
+<title>World Live Cams</title>
 
 <style>
 body {
   margin: 0;
   font-family: system-ui;
-  background: radial-gradient(circle at top, #0b1220, #05070f);
+  background: #050814;
   color: white;
-  overflow-x: hidden;
 }
 
-/* glowing background */
-.orb {
-  position: fixed;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.4;
-  animation: float 12s infinite ease-in-out;
-}
-
-.orb.blue { background: #3b82f6; top: -150px; left: -120px; }
-.orb.purple { background: #8b5cf6; bottom: -200px; right: -150px; }
-
-@keyframes float {
-  0% { transform: translate(0,0); }
-  50% { transform: translate(100px, 80px); }
-  100% { transform: translate(0,0); }
-}
-
-/* header */
 header {
   text-align: center;
-  padding: 20px;
+  padding: 18px;
 }
 
-header h1 {
-  font-size: 20px;
-  margin: 0;
-}
+h1 { font-size: 18px; margin: 0; }
 
-/* tags */
-.tags {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
-  padding: 10px;
-}
-
-.tag {
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-  font-size: 12px;
-}
-
-/* grid */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -70,18 +27,17 @@ header h1 {
   padding: 15px;
 }
 
-/* card */
 .card {
   background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
   overflow: hidden;
   cursor: pointer;
   transition: 0.25s;
 }
 
 .card:hover {
-  transform: scale(1.03);
+  transform: scale(1.02);
   border-color: #3b82f6;
 }
 
@@ -91,15 +47,17 @@ header h1 {
   border: none;
 }
 
-.card-title {
+.title {
   padding: 10px;
   font-size: 13px;
   display: flex;
   justify-content: space-between;
 }
 
-/* WATCH VIEW */
-#watchView {
+.badge { color: #22c55e; }
+
+/* WATCH */
+#watch {
   display: none;
   padding: 15px;
 }
@@ -113,110 +71,97 @@ header h1 {
   cursor: pointer;
 }
 
-.watch-box {
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-.watch-box iframe {
+.player {
   width: 100%;
   height: 70vh;
   border: none;
-}
-
-/* MOBILE */
-@media (max-width: 768px) {
-  header h1 { font-size: 16px; }
-  .grid { grid-template-columns: 1fr; }
+  border-radius: 12px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="orb blue"></div>
-<div class="orb purple"></div>
-
-<!-- HOME -->
-<div id="homeView">
-
 <header>
-  <h1>🌍 WonderWorld Live Experience</h1>
+  <h1>🌍 World Live Experience</h1>
 </header>
 
-<div class="tags">
-  <div class="tag">🌆 Street</div>
-  <div class="tag">🐘 Safari</div>
-  <div class="tag">🌲 Forest</div>
-  <div class="tag">🏔 Mountain</div>
-  <div class="tag">❄ Snow</div>
-</div>
+<!-- HOME -->
+<div id="home">
 
 <div class="grid" id="grid"></div>
 
 </div>
 
 <!-- WATCH -->
-<div id="watchView">
+<div id="watch">
 
-  <div class="back" onclick="goBack()">← Back</div>
+<div class="back" onclick="back()">← Back</div>
 
-  <div class="watch-box">
-    <iframe id="player"></iframe>
-  </div>
+<iframe id="player" class="player"></iframe>
 
 </div>
 
 <script>
+
+/* -----------------------------
+   ONLY STABLE PUBLIC CAMS
+------------------------------*/
 const cams = [
   {
-    title: "African Safari Live",
+    title: "🐘 Namibia Safari Live",
     url: "https://www.youtube.com/embed/ydYDqZQpim8"
   },
   {
-    title: "Forest Wildlife Cam",
+    title: "🐘 African Wildlife Cam",
     url: "https://www.youtube.com/embed/9No-FiEInLA"
   },
   {
-    title: "Mountain Live View",
+    title: "🌲 Forest Nature Live",
     url: "https://www.youtube.com/embed/6QF3p2k0a9k"
   },
   {
-    title: "Snow Mountain Cam",
+    title: "🏔 Mountain View Live",
     url: "https://www.youtube.com/embed/fV3CpX1Jr8Q"
   },
   {
-    title: "Ocean Live Cam",
-    url: "https://www.youtube.com/embed/live_stream?channel=UCJZ0m2LkF3qXxQ5p9qQ"
+    title: "❄ Snow Region Cam",
+    url: "https://www.youtube.com/embed/live_stream?channel=UCVHFbqXqoYvEWM1Ddxl0QDg"
+  },
+
+  /* SPORTS (LEGAL FREE CONTENT ONLY) */
+  {
+    title: "🏟 Sports Highlights Channel",
+    url: "https://www.youtube.com/embed/live_stream?channel=UCWJ2lWNubArHWmf3FIHbfcQ"
   }
 ];
 
 const grid = document.getElementById("grid");
 
-cams.forEach(cam => {
+cams.forEach(c => {
   grid.innerHTML += `
-    <div class="card" onclick="openCam('${cam.url}')">
-      <iframe src="${cam.url}" loading="lazy"></iframe>
-      <div class="card-title">
-        ${cam.title}
-        <span>LIVE</span>
+    <div class="card" onclick="openCam('${c.url}')">
+      <iframe src="${c.url}" loading="lazy"></iframe>
+      <div class="title">
+        ${c.title}
+        <span class="badge">LIVE</span>
       </div>
     </div>
   `;
 });
 
 function openCam(url){
-  document.getElementById("homeView").style.display = "none";
-  document.getElementById("watchView").style.display = "block";
+  document.getElementById("home").style.display = "none";
+  document.getElementById("watch").style.display = "block";
   document.getElementById("player").src = url;
 }
 
-function goBack(){
-  document.getElementById("watchView").style.display = "none";
-  document.getElementById("homeView").style.display = "block";
+function back(){
+  document.getElementById("watch").style.display = "none";
+  document.getElementById("home").style.display = "block";
   document.getElementById("player").src = "";
 }
+
 </script>
 
 </body>
